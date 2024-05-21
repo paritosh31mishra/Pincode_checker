@@ -73,11 +73,17 @@ const submit = (shadowRoot) =>{
              fetch(url)
              .then(response => response.json())
              .then(responsedata =>{
-                responsedata[0].PostOffice.map( (place, index )=> {
-                   data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
-                })
-
-                data = data + "</table>"
+                 if(responsedata[0].length() != 0)
+                 { 
+                        responsedata[0].PostOffice.map( (place, index )=> {
+                           data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
+                        })
+                       data = data + "</table>"
+                 }
+                 else{
+                     data = "No place found at this pincode!!";
+                 }
+              
             shadowRoot.querySelector("#printstatus").innerHTML = data;
                  
              })
