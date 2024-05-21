@@ -66,24 +66,18 @@ const submit = (shadowRoot) =>{
          {
              document.getElementById("printstatus").innerText = "Invalid pincode ! Please write the correct one..." ;
          }
-         else{
+          else{
              let url =" https://api.postalpincode.in/pincode/" + pincode;
              let data = "<table align='center' border='' cellspacing='0px' cellpadding='10px' >";
              data = data + "<tr> <th> Place </th> <th> Delivery Status </th> </tr>"
              fetch(url)
              .then(response => response.json())
              .then(responsedata =>{
-                 if(responsedata[0].length() != 0)
-                 { 
-                        responsedata[0].PostOffice.map( (place, index )=> {
-                           data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
-                        })
-                       data = data + "</table>"
-                 }
-                 else{
-                     data = "No place found at this pincode!!";
-                 }
-              
+                responsedata[0].PostOffice.map( (place, index )=> {
+                   data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
+                })
+
+                data = data + "</table>"
             shadowRoot.querySelector("#printstatus").innerHTML = data;
                  
              })
