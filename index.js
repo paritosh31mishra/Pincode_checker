@@ -60,29 +60,41 @@ class Blogpost extends HTMLElement{
 customElements.define("blog-post", Blogpost );
 
 
-const submit = (shadowRoot) =>{
+const submit =  (shadowRoot) =>{
         let pincode = shadowRoot.querySelector("#pincode").value;
         if( pincode.length != 6)
          {
-             document.getElementById("printstatus").innerText = "Invalid pincode ! Please write the correct one..." ;
+            shadowRoot.querySelector("#printstatus").innerText = "Invalid pincode ! Please write the correct one...";
+             
          }
-          else{
+         else{
              let url =" https://api.postalpincode.in/pincode/" + pincode;
              let data = "<table align='center' border='' cellspacing='0px' cellpadding='10px' >";
              data = data + "<tr> <th> Place </th> <th> Delivery Status </th> </tr>"
              fetch(url)
              .then(response => response.json())
              .then(responsedata =>{
-                responsedata[0].PostOffice.map( (place, index )=> {
-                   data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
-                })
-
-                data = data + "</table>"
-            shadowRoot.querySelector("#printstatus").innerHTML = data;
+                if( responsedata[0].PostOffice &&  responsedata[0].PostOffice.length > 0)
+                    {
+                        responsedata[0].PostOffice.map( (place, index )=>
+                       {
+                            data = data + "<tr key={index} style='align:center;'> <td>" + place.Name + " </td> <td> " + place.DeliveryStatus +  "</td> </tr>"
+                        })
+         
+                         data = data + "</table>"
+                         shadowRoot.querySelector("#printstatus").innerHTML = data;
+                    }
+              else{
+                shadowRoot.querySelector("#printstatus").innerText = "No place exist at given pincode !!";
+              }
+           
                  
              })
          }
      }
+
+
+
 
 
 
